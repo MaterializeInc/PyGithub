@@ -5,6 +5,7 @@ from typing import Any, Callable, Dict, Iterator, Optional, Tuple, Union
 from requests.models import Response
 
 from github.AppAuthentication import AppAuthentication
+from github.GithubException import GithubException
 from github.GithubObject import GithubObject
 from github.InstallationAuthorization import InstallationAuthorization
 
@@ -79,12 +80,6 @@ class Requester:
     def __createConnection(
         self,
     ) -> Union[HTTPRequestsConnectionClass, HTTPSRequestsConnectionClass]: ...
-    def __createException(
-        self,
-        status: int,
-        headers: Dict[str, Any],
-        output: str,
-    ) -> Any: ...
     def __log(
         self,
         verb: str,
@@ -197,11 +192,20 @@ class Requester:
         input: Optional[OrderedDict[str, str]] = ...,
     ) -> Tuple[Dict[str, Any], Optional[Dict[str, Any]]]: ...
     @classmethod
+    def createException(
+        cls,
+        status: int,
+        headers: Dict[str, Any],
+        output: str,
+    ) -> GithubException: ...
+    @classmethod
     def resetConnectionClasses(cls) -> None: ...
     @classmethod
     def setDebugFlag(cls, flag: bool) -> None: ...
     @classmethod
     def setOnCheckMe(cls, onCheckMe: Callable) -> None: ...
+    @classmethod
+    def isRateLimitError(cls, message: str) -> bool: ...
 
 class RequestsResponse:
     def __init__(self, r: Response) -> None: ...
