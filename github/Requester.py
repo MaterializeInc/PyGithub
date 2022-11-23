@@ -477,12 +477,23 @@ class Requester:
 
     @classmethod
     def isRateLimitError(cls, message):
+        return cls.isPrimaryRateLimitError(message) or cls.isSecondaryRateLimitError(message)
+
+    @classmethod
+    def isPrimaryRateLimitError(cls, message):
         if not message:
             return False
 
         message = message.lower()
-        return message.startswith("api rate limit exceeded") or \
-            message.endswith("please wait a few minutes before you try again.")
+        return message.startswith("api rate limit exceeded")
+
+    @classmethod
+    def isSecondaryRateLimitError(cls, message):
+        if not message:
+            return False
+
+        message = message.lower()
+        return message.startswith("you have exceeded a secondary rate limit")
 
     def __structuredFromJson(self, data):
         if len(data) == 0:
