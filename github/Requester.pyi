@@ -196,7 +196,7 @@ class Requester:
         cls,
         status: int,
         headers: Dict[str, Any],
-        output: str,
+        output: Optional[Dict[str, Any]],
     ) -> GithubException: ...
     @classmethod
     def resetConnectionClasses(cls) -> None: ...

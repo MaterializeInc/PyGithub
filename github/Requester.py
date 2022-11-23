@@ -455,24 +455,24 @@ class Requester:
 
     @classmethod
     def createException(cls, status, headers, output):
-        if status == 401 and output.get("message") == "Bad credentials":
-            exc = GithubException.BadCredentialsException
-        elif (
-            status == 401
-            and Consts.headerOTP in headers
-            and re.match(r".*required.*", headers[Consts.headerOTP])
-        ):
-            exc = GithubException.TwoFactorException
-        elif status == 403 and output.get("message").startswith(
-            "Missing or invalid User Agent string"
-        ):
-            exc = GithubException.BadUserAgentException
-        elif status == 403 and cls.isRateLimitError(output.get("message")):
-            exc = GithubException.RateLimitExceededException
-        elif status == 404 and output.get("message") == "Not Found":
-            exc = GithubException.UnknownObjectException
-        else:
-            exc = GithubException.GithubException
+        exc = GithubException.GithubException
+        if output is not None:
+            if status == 401 and output.get("message") == "Bad credentials":
+                exc = GithubException.BadCredentialsException
+            elif (
+                status == 401
+                and Consts.headerOTP in headers
+                and re.match(r".*required.*", headers[Consts.headerOTP])
+            ):
+                exc = GithubException.TwoFactorException
+            elif status == 403 and output.get("message").startswith(
+                "Missing or invalid User Agent string"
+            ):
+                exc = GithubException.BadUserAgentException
+            elif status == 403 and cls.isRateLimitError(output.get("message")):
+                exc = GithubException.RateLimitExceededException
+            elif status == 404 and output.get("message") == "Not Found":
+                exc = GithubException.UnknownObjectException
         return exc(status, output, headers)
 
     @classmethod
