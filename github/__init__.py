@@ -69,7 +69,7 @@ from .GithubException import (
     TwoFactorException,
     UnknownObjectException,
 )
-from github.GithubRetry import GithubRetry
+from .GithubRetry import GithubRetry
 from .InputFileContent import InputFileContent
 from .InputGitAuthor import InputGitAuthor
 from .InputGitTreeElement import InputGitTreeElement
