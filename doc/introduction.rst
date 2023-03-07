@@ -21,6 +21,10 @@ First create a Github instance::
     # Github Enterprise with custom hostname
     g = Github(base_url="https://{hostname}/api/v3", login_or_token="access_token")
 
+    # automatically retry retry-able errors
+    from github import GithubRetry
+    g = Github("access_token", retry=GithubRetry())
+
 Then play with your Github objects::
 
     for repo in g.get_user().get_repos():
